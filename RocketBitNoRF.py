@@ -81,6 +81,8 @@ while True:
         else: grondTimer = 0    
               
     elif status == geland:
+        pin0.write_analog(0) 
+        pin1.write_analog(0)
         display.show(Image('99999:'
                             '99999:'
                             '99999:'
