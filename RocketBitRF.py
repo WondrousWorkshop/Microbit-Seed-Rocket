@@ -5,7 +5,7 @@ import music
 import radio
 
 def parachuteOpenen():   
-    pin0.write_analog(115)
+    pin2.write_analog(115)
 
 def luikOpenen():   
     pin1.write_analog(115)
@@ -43,6 +43,20 @@ radio.config(group=2, power=7)
 radio.on()
 
 while True:
+    # 1. Luister of de afstandsbediening iets zegt
+    ontvangst = radio.receive()
+    
+    if ontvangst == "P":
+        status = parachute
+        parachuteOpenen()
+        timer = utime.ticks_ms() # Reset de timer voor de volgende fases!
+        display.show(Image.SQUARE_SMALL) # Even laten zien dat we een commando kregen
+        
+    elif ontvangst == "C":
+        status = cargoDrop
+        luikOpenen()
+        timer = utime.ticks_ms() # Reset de timer voor de landing-check!
+        display.show(Image.SQUARE)
     if utime.ticks_ms() >= radioTimer + 100:
         radioTimer = utime.ticks_ms()
         radio.send(str(status))
@@ -91,7 +105,7 @@ while True:
               
     elif status == geland:
         pin0.write_analog(0) 
-        pin1.write_analog(0)
+        pin2.write_analog(0)
         display.show(Image('99999:'
                             '99999:'
                             '99999:'
